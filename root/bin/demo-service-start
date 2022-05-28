@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+DEMO_AUTO_RESTART=${DEMO_AUTO_RESTART:-no}
+DEMO_LOG_FILE=${DEMO_LOG_FILE:-/dev/stdout}
+function service() {
+    while :
+    do
+        xdotool search --class WeChat.exe >/dev/null 2>&1
+        if [ "$?" != "0" ]; then
+            echo "WeChat window not found"
+            sleep 5
+            continue
+        fi
+        sudo netstat -tunlp | grep 5555 >/dev/null 2>&1
+        if [ "$?" != "0" ]; then
+            echo "Port 5555 is not ready"
+            sleep 5
+            continue
+        fi
+        
+        cd /home/app/.wine/drive_c/demo-service
+        wine python service.py >${DEMO_LOG_FILE} 2>&1
+        case ${DEMO_AUTO_RESTART} in
+        false|no|n|0)
+            exit 0
+            ;;
+        esac
+    done
+}
+service
