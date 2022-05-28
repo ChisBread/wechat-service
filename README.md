@@ -11,8 +11,8 @@
 - R: Read
 - T: The
 - C: Code
-- And:
   - https://github.com/chisbread/wechat-service/tree/master/root/drive_c/demo-service/service.py
+- And:
   - [wechat-box](https://github.com/chisbread/wechat-box)
 
 # Credit
