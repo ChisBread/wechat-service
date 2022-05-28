@@ -7,14 +7,32 @@
   - Build auto.dll from source
 
 # Usage
-- For some reason
-- R: Read
-- T: The
-- C: Code
+- Ding-Dong Bot:
   - https://github.com/chisbread/wechat-service/tree/master/root/drive_c/demo-service/service.py
-- And:
-  - [wechat-bot](https://github.com/cixingguangming55555/wechat-bot)
+
 
 # Credit
 - https://github.com/chisbread/wechat-box
 - https://github.com/cixingguangming55555/wechat-bot
+
+```yaml
+version: "3.3"
+
+services:
+    wechat-service:
+        image: "chisbread/wechat-service:latest"
+        restart: unless-stopped
+        container_name: "wechat-service"
+        environment:
+            WC_AUTO_RESTART: "yes"
+            DEMO_SERVICE: "no"
+            INJMON_LOG_FILE: "/dev/null"
+        ports:
+            - "8080:8080" # noVNC
+            - "5555:5555" # websocket server
+        volumes:
+            - "<path>:/home/app/WeChat Files/" 
+            - "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
+            - "<path>:/home/app/.wine/drive_c/temp/wechat/" # hook config
+
+```
