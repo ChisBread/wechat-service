@@ -1,4 +1,4 @@
-# WeChat Box
+# WeChat Service
 - Run your WeChat as a service
 
 # TODO
