@@ -25,7 +25,6 @@ services:
         restart: unless-stopped
         container_name: "wechat-service"
         environment:
-            WC_AUTO_RESTART: "yes"
             DEMO_SERVICE: "no"
             #optional INJMON_LOG_FILE: "/dev/null"
         ports:

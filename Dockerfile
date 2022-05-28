@@ -7,5 +7,9 @@ RUN bash -c 'nohup /entrypoint.sh 2>&1 &' && sleep 5 && /payloads.sh \
     && sudo chown -R app:app /drive_c \
     && cp -r /drive_c/* /home/app/.wine/drive_c/ \
     && sudo rm /tmp/.X0-lock
+
+ENV WC_AUTO_RESTART="yes" \
+    DEMO_SERVICE="yes"
+
 #settings
 ENTRYPOINT ["/serv-entrypoint.sh"]
