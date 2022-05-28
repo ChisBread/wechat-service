@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 from bs4 import BeautifulSoup
-from concurrent import futures
 import websocket
 import threading
 import time
