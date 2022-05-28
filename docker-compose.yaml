@@ -10,7 +10,7 @@ services:
         container_name: "wechat-service"
         environment:
             WC_AUTO_RESTART: "yes"
-            DEMO_SERVICE: "no" # Port 5555 will be occupied
+            DEMO_SERVICE: "yes" # Port 5555 will be occupied
             DEMO_AUTO_RESTART: "yes"
             INJMON_LOG_FILE: "/dev/null"
         ports:
