@@ -13,7 +13,7 @@
 - C: Code
   - https://github.com/chisbread/wechat-service/tree/master/root/drive_c/demo-service/service.py
 - And:
-  - [wechat-box](https://github.com/chisbread/wechat-box)
+  - [wechat-bot](https://github.com/cixingguangming55555/wechat-bot)
 
 # Credit
 - https://github.com/chisbread/wechat-box
