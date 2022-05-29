@@ -12,8 +12,10 @@
 cd bot
 python bot.py
 ```
-
-
+# Build Image
+```bash
+./build-docker.sh
+```
 ## Credit
 - https://github.com/chisbread/wechat-box
 - https://github.com/cixingguangming55555/wechat-bot
@@ -29,6 +31,10 @@ services:
         container_name: "wechat-service"
         environment:
             WC_AUTO_RESTART: "yes"
+            INJMON_LOG_FILE: "/dev/stdout"
+            HOOK_PROC_NAME: "WeChat"
+            TARGET_CMD: "wechat-start"
+            HOOK_DLL: "auto.dll"
             #optional INJMON_LOG_FILE: "/dev/null"
         ports:
             - "8080:8080" # noVNC

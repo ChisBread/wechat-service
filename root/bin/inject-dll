@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-cd /home/app/.wine/drive_c/injector
-wine python injector.py $@
