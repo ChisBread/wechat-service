@@ -103,9 +103,8 @@ def send_msg(msg, wxid='null', roomid='null', nickname='null', force_type=None):
         wxid = roomid
     lmsg = msg.lower()
     msg_type = TXT_MSG
-    if force_type is not None:
-        msg_type = force_type
-    elif lmsg.startswith("c:\\") and (lmsg.endswith('.png') or lmsg.endswith('.jpg')):
+
+    if lmsg.startswith("c:\\") and (lmsg.endswith('.png') or lmsg.endswith('.jpg')):
         msg_type = PIC_MSG
     elif lmsg.startswith("c:\\") and (lmsg.endswith('.7z') or lmsg.endswith('.zip') \
             or lmsg.endswith('.rar') or lmsg.endswith('.tar') or lmsg.endswith('.tar.gz')):
@@ -119,7 +118,8 @@ def send_msg(msg, wxid='null', roomid='null', nickname='null', force_type=None):
         else:
             wxid = roomid
             roomid = 'null'
-        
+    if force_type is not None:
+        msg_type = force_type    
     
     qs={
         'id':uuid(),
