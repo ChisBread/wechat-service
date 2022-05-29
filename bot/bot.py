@@ -30,7 +30,7 @@ class Bot(threading.Thread):
         self.handle_register[handle_name] = foo
     ########## HTTP API 样例 ##########
     # 发送http请求到hook端
-    def __send_http(self, uri, data):
+    def send_http(self, uri, data):
         if isinstance(data, str) or isinstance(data, bytes):
             data = json.loads(data)
         base_data={
@@ -44,46 +44,44 @@ class Bot(threading.Thread):
         }
         base_data.update(data)
         url = f'http://{self.IP}:{self.PORT}/{uri}'
-        print(base_data)
         rsp = requests.post(url,json={'para':base_data},timeout=5)
         return rsp.json()
     ################## 发送消息 ##################
     def send_msg(self, msg, wxid='null', roomid='null', nickname='null', force_type=None):
         uri = '/api/sendtxtmsg'
-        return json.loads(self.__send_http(uri, query.send_msg(msg, wxid, roomid, nickname, force_type)))
+        return json.loads(self.send_http(uri, query.send_msg(msg, wxid, roomid, nickname, force_type)))
     ################## 个人信息 ##################
     # get_personal_info 获取登陆账号的个人信息
     def get_personal_info(self):
         uri = '/api/get_personal_info'
-        return self.__send_http(uri, query.get_personal_info())
+        return self.send_http(uri, query.get_personal_info())
     # get_personal_detail 获取指定wxid的个人信息
     def get_personal_detail(self, wxid):
         uri = '/api/get_personal_detail'
-        return self.__send_http(uri, query.get_personal_detail(wxid))
+        return self.send_http(uri, query.get_personal_detail(wxid))
     # get_user_nick 获取指定wxid的昵称
     def get_user_nick(self, wxid):
         uri='api/getmembernick'
-        return json.loads(self.__send_http(uri, query.get_user_nick(wxid)))
+        return self.send_http(uri, query.get_user_nick(wxid))
     # get_contact_list 获取联系人(wxid和roomid)
-    # 似乎不能用
     def get_contact_list(self):
         uri='/api/getcontactlist'
-        return json.loads(self.__send_http(uri, query.get_contact_list()))
+        return self.send_http(uri, query.get_contact_list())
     ################## 群聊信息 ##################
     # get_chatroom_member 获取指定群的成员
     def get_chatroom_member(self, roomid):
         uri='/api/get_charroom_member_list'
-        return json.loads(self.__send_http(uri, query.get_chatroom_member(roomid)))
+        return self.send_http(uri, query.get_chatroom_member(roomid))
     # get_chatroom_member_nick 获取群聊成员昵称, 或微信好友的昵称(只填wxid时)
     def get_chatroom_member_nick(self, roomid='null', wxid='ROOT'):
         # 获取指定群的成员的昵称 或 微信好友的昵称
         uri='api/getmembernick'
-        return json.loads(self.__send_http(uri, query.get_chatroom_member_nick(roomid, wxid)))
+        return self.send_http(uri, query.get_chatroom_member_nick(roomid, wxid))
 
     
     ########## Message Handle ##########
     # 处理异步返回的消息
-    def __send_websocket(data):
+    def send_websocket(self, data):
         self.ws.send(data)
     # wshd_noimplement 未实现/dummy handle
     def wshd_noimplement(self, j):
@@ -266,7 +264,7 @@ class Bot(threading.Thread):
 if __name__ == "__main__":
     h = Bot()
     if len(sys.argv) > 1:
-        print(eval('h.'+sys.argv[1]))
+        print(json.dumps(eval('h.'+sys.argv[1]), ensure_ascii=False))
         exit(0)
     #h.register("on_open", lambda ws: logging("hi~"))
     h.register("on_close", lambda ws: logging("byebye~"))
