@@ -8,7 +8,10 @@
 
 ## Usage
 - Ding-Dong Bot:
-  - https://github.com/chisbread/wechat-service/tree/master/root/drive_c/demo-service/service.py
+```bash
+cd bot
+python bot.py
+```
 
 
 ## Credit
@@ -25,7 +28,7 @@ services:
         restart: unless-stopped
         container_name: "wechat-service"
         environment:
-            DEMO_SERVICE: "no"
+            WC_AUTO_RESTART: "yes"
             #optional INJMON_LOG_FILE: "/dev/null"
         ports:
             - "8080:8080" # noVNC
