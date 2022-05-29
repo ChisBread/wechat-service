@@ -44,32 +44,39 @@ def get_personal_detail(wxid):
     }
     return json.dumps(qs)
 # get_chatroom_member_nick 获取chatroom 成员昵称
-def get_chatroom_member_nick(roomid):
+def get_chatroom_member_nick(roomid='null', wxid = 'ROOT'):
+    if not roomid:
+        roomid = 'null'
+    if wxid == 'null' and roomid == 'null':
+        raise ValueError("wxid和roomid不能同时为'null'")
     qs={
         'id':uuid(),
         'type':CHATROOM_MEMBER_NICK,
         'content':roomid,
-        'wxid':'ROOT',
+        'wxid':wxid,
     }
     return json.dumps(qs)
-# get_chatroom_member 获取所有群的成员信息
-def get_chatroom_member():
-    qs={
+def get_user_nick(wxid):
+    return get_chatroom_member_nick(wxid=wxid)
+# get_chatroom_member 获取群的成员信息
+def get_chatroom_member(roomid='null'):
+    qs = {
         'id':uuid(),
         'type':CHATROOM_MEMBER,
         'wxid':'null',
+        'roomid':roomid,
         'content':'op:list member',
     }
     return json.dumps(qs)
-# get_contact_list 获取微信通讯录用户名字和wxid
+# get_contact_list 获取当前通讯录的wxid和roomid
 def get_contact_list():
-	qs={
-		'id':uuid(),
-		'type':USER_LIST,
-		'content':'user list',
-		'wxid':'null',
+    qs = {  
+        'id':uuid(),
+        'type':USER_LIST,
+        'content':'user list',
+        'wxid':'null',
 	}
-	return json.dumps(qs)
+    return json.dumps(qs)
 # get_user_list alias of get_contact_list
 def get_user_list():
     return get_contact_list()

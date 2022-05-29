@@ -9,8 +9,7 @@
 ## Usage
 - Ding-Dong Bot:
 ```bash
-cd bot
-python bot.py
+python bot/bot.py
 ```
 # Build Image
 ```bash
