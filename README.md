@@ -32,7 +32,7 @@ services:
             WC_AUTO_RESTART: "yes"
             INJMON_LOG_FILE: "/dev/stdout"
             # 微信的登陆态判断接口
-            INJ_CONDITION: "sleep 5; curl 'http://127.0.0.1:8680/hi' 2>/dev/null | grep -P 'code.:0'" 
+            INJ_CONDITION: " [ \"`sudo netstat -tunlp | grep 5555`\" != '' ] && exit 0 ; sleep 5 ; curl 'http://127.0.0.1:8680/hi' 2>/dev/null | grep -P 'code.:0'"
             HOOK_PROC_NAME: "WeChat"
             TARGET_CMD: "wechat-start"
             HOOK_DLL: "auto.dll"
