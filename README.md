@@ -1,5 +1,5 @@
 # WeChat Service
-- Run your WeChat as a service
+- Let your WeChat run as a service
 ![echo](https://github.com/ChisBread/wechat-service/raw/master/images/echo.png)
 ## TODO
 - *remove all binaries*
@@ -39,13 +39,15 @@ python3 bot/bot.py
 
 Websocket events
 ```python
-h.register("on_open", lambda ws: logging("hi"))
-h.register("on_close", lambda ws: logging("bye"))
+bot = Bot(ip='127.0.0.1', port=5555)
+bot.register("on_open", lambda ws: logging("hi"))
+bot.register("on_close", lambda ws: logging("bye"))
+bot.run()
 ```
 Receive at message
 ```python
 # Hip hop Bot
-h.register("recv_txt_msg", lambda msg: h.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
+bot.register("recv_txt_msg", lambda msg: bot.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
 ```
 #### Info API
 
