@@ -26,7 +26,6 @@ sudo docker run -it --name wechat-service --rm  \
 # -v "<path>:/home/app/WeChat Files/"
 # -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
 ```
-console log *inject condition pass* means your wechat not login.
 2. open noVNC http://<Your IP Address>:8080/vnc.html and login wechat
 ![inject](https://github.com/ChisBread/wechat-service/raw/master/images/inject.png)
 3. run the following example
