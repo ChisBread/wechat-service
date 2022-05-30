@@ -74,7 +74,7 @@ python3 bot/bot.py "send_msg(${msg}, ${wechatid}, ${roomid}, ${nickname})"
 sudo docker run -it --name wechat-service --rm  \
     -e HOOK_PROC_NAME=WeChat \
     -e HOOK_DLL=auto.dll \
-    -e WC_AUTO_RESTART="yes" \
+    -e TARGET_AUTO_RESTART="yes" \
     -e INJ_CONDITION="[ \"\`sudo netstat -tunlp | grep 5555\`\" != '' ] && exit 0 ; sleep 5 ; curl 'http://127.0.0.1:8680/hi' 2>/dev/null | grep -P 'code.:0'" \
     -e TARGET_CMD=wechat-start \
     -v "<path>:/home/app/WeChat Files/" \
@@ -93,7 +93,7 @@ services:
         restart: unless-stopped
         container_name: "wechat-service"
         environment:
-            WC_AUTO_RESTART: "yes"
+            TARGET_AUTO_RESTART: "yes"
             INJMON_LOG_FILE: "/dev/stdout"
             # 微信的登陆态判断接口
             INJ_CONDITION: " [ \"`sudo netstat -tunlp | grep 5555`\" != '' ] && exit 0 ; sleep 5 ; curl 'http://127.0.0.1:8680/hi' 2>/dev/null | grep -P 'code.:0'"
@@ -101,9 +101,11 @@ services:
             TARGET_CMD: "wechat-start"
             HOOK_DLL: "auto.dll"
             #optional INJMON_LOG_FILE: "/dev/null"
+            #optional TARGET_LOG_FILE: "/dev/stdout"
         ports:
             - "8080:8080" # noVNC
             - "5555:5555" # websocket server
+            - "5900:5900" # vnc server
         volumes:
             - "<path>:/home/app/WeChat Files/" 
             - "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
