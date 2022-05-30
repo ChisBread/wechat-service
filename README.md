@@ -1,6 +1,6 @@
 # WeChat Service
 - Run your WeChat as a service
-
+![echo](https://github.com/ChisBread/wechat-service/raw/master/images/echo.png)
 ## TODO
 - *remove all binaries*
   - ~~Python Injector instead of auto-inject.exe binary~~
