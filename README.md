@@ -11,12 +11,12 @@
 2. open noVNC http://<Your IP Address>:8080/vnc.html and login wechat
 3. run the following example
 ### Examples
-- Ding-Dong Bot:
+#### Ding-Dong Bot:
 
 ```bash
 python3 bot/bot.py
 ```
-- Register your own function to the message event
+#### Register your own function to the message event
 
 Websocket events
 ```python
@@ -28,7 +28,7 @@ Receive at message
 # Hip hop Bot
 h.register("recv_txt_msg", lambda msg: h.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
 ```
-- Info API
+#### Info API
 
 Pull all contact info (chatroom and user)
 ```bash
