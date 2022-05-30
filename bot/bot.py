@@ -16,6 +16,8 @@ def logging(msg):
 class Bot(threading.Thread):
     handle_register = {}
     contact_list = {}
+    wxid = ''
+    name = ''
     def __init__(self, ip='127.0.0.1', port=5555):
         threading.Thread.__init__(self)
         self.IP = ip
@@ -45,7 +47,13 @@ class Bot(threading.Thread):
         base_data.update(data)
         url = f'http://{self.IP}:{self.PORT}/{uri}'
         rsp = requests.post(url,json={'para':base_data},timeout=5)
-        return rsp.json()
+        rsp = rsp.json()
+        if 'content' in rsp and isinstance(rsp['content'], str):
+            try:
+                rsp['content'] = json.loads(rsp['content'])
+            except:
+                pass
+        return rsp
     ################## 发送消息 ##################
     def send_msg(self, msg, wxid='null', roomid='null', nickname='null', force_type=None):
         uri = '/api/sendtxtmsg'
@@ -100,10 +108,12 @@ class Bot(threading.Thread):
         self.wshd_noimplement(j)
     # wshd_personal_info 登陆账号的信息
     def wshd_personal_info(self, j):
-        if 'personal_detail' in self.handle_register:
-            self.handle_register['personal_detail'](j)
+        self.name = j['content']['wx_name']
+        self.wxid = j['content']['wx_id']
+        if 'personal_info' in self.handle_register:
+            self.handle_register['personal_info'](j)
             return
-        self.wshd_noimplement(j)
+        logging("Connect success name: %s wxid: %s"%(self.name, self.wxid))
     # wshd_at_msg 预留函数
     def wshd_at_msg(self, j):
         if 'at_msg' in self.handle_register:
@@ -126,8 +136,8 @@ class Bot(threading.Thread):
         data=j.content
         for d in data:
             logging(f'roomid:{d.roomid}')
-    # wshd_user_list 联系人
-    def wshd_user_list(self, j):
+    # wshd_contact_list 联系人
+    def wshd_contact_list(self, j):
         for item in j['content']:
             self.contact_list[item['wxid']] = item
         if 'user_list' in self.handle_register:
@@ -137,7 +147,10 @@ class Bot(threading.Thread):
         if 'contact_list' in self.handle_register:
             self.handle_register['contact_list'](j)
             return
-        logging('启动完成')
+
+    # wshd_user_list alias of wshd_contact_list
+    def wshd_user_list(self, j):
+        self.wshd_contact_list(j)
     # wshd_join_room 进群事件
     def wshd_join_room(self, j):
         if 'join_room' in self.handle_register:
@@ -153,7 +166,7 @@ class Bot(threading.Thread):
     # wshd_recv_txt_cite_msg 引用的文字消息
     def wshd_recv_txt_cite_msg(self, msg_json):
         if 'recv_txt_cite_msg' in self.handle_register:
-            self.handle_register['recv_txt_cite_msg'](j)
+            self.handle_register['recv_txt_cite_msg'](msg_json)
             return
         msgXml=msg_json['content']['content'].replace('&amp;','&').replace('&lt;','<').replace('&gt;','>')
         soup=BeautifulSoup(msgXml,'lxml')
@@ -173,7 +186,11 @@ class Bot(threading.Thread):
     # wshd_recv_txt_msg 文字消息
     def wshd_recv_txt_msg(self, msg_json):
         if 'recv_txt_msg' in self.handle_register:
-            self.handle_register['recv_txt_msg'](j)
+            try:
+                self.handle_register['recv_txt_msg'](msg_json)
+            except:
+                import traceback
+                traceback.print_exc()
             return
         logging(f'收到消息:{msg_json}')
         msg_content = msg_json['content'].replace('\u2005','')
@@ -207,17 +224,18 @@ class Bot(threading.Thread):
     # wshd_recv_pic_msg 图片消息
     def wshd_recv_pic_msg(self, msg_json):
         if 'recv_pic_msg' in self.handle_register:
-            self.handle_register['recv_pic_msg'](j)
+            self.handle_register['recv_pic_msg'](msg_json)
             return
         self.wshd_noimplement(msg_json)
 
     ########## WebSocket Events ##########
     def make_on_open(self):
         def on_open(ws):
+            ws.send(query.get_personal_info())
+            ws.send(query.get_contact_list())
             if 'on_open' in self.handle_register:
                 self.handle_register['on_open'](ws)
                 return
-            ws.send(query.get_contact_list())
         return on_open
     def make_on_error(self):
         def on_error(ws, error):
@@ -236,6 +254,11 @@ class Bot(threading.Thread):
     def make_on_message(self):
         def on_message(ws, message):
             j=json.loads(message)
+            if 'content' in j and isinstance(j['content'], str):
+                try:
+                    j['content'] = json.loads(j['content'])
+                except:
+                    pass
             resp_type=j['type']
             action={
                 query.PERSONAL_DETAIL:self.wshd_personal_detail,
@@ -266,7 +289,6 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         print(json.dumps(eval('h.'+sys.argv[1]), ensure_ascii=False))
         exit(0)
-    #h.register("on_open", lambda ws: logging("hi~"))
-    h.register("on_close", lambda ws: logging("byebye~"))
-    print(h.get_personal_info())
+    h.register("on_open", lambda ws: logging("Connecting to WeChat service .."))
+    h.register("on_close", lambda ws: logging("Byebye~"))
     h.run()

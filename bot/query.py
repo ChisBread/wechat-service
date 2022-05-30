@@ -52,7 +52,7 @@ def get_chatroom_member_nick(roomid='null', wxid = 'ROOT'):
     qs={
         'id':uuid(),
         'type':CHATROOM_MEMBER_NICK,
-        'content':roomid,
+        'roomid':roomid,
         'wxid':wxid,
     }
     return json.dumps(qs)
@@ -93,7 +93,7 @@ def destroy_all():
 # send_msg 在私聊、群聊中发送文本、图片、附件消息
 # usage: 
 #    wxid, roomid任选其一时, 发送非at消息, 根据msg的形式决定具体类型
-#    wxid, roomid都存在时, 发送at消息
+#    wxid, roomid, nickname都存在时, 发送at消息
 def send_msg(msg, wxid='null', roomid='null', nickname='null', force_type=None):
     if not wxid:
         wxid = 'null'

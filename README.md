@@ -7,10 +7,58 @@
   - Build auto.dll from source
 
 ## Usage
+1. Pull(or build) and run your wechat service
+2. open noVNC http://<Your IP Address>:8080/vnc.html and login wechat
+3. run the following example
+### Examples
 - Ding-Dong Bot:
 ```bash
-python bot/bot.py
+python3 bot/bot.py
 ```
+- Register your own function to the message event
+Websocket events
+```python
+h.register("on_open", lambda ws: logging("hi"))
+h.register("on_close", lambda ws: logging("bye"))
+```
+Receive at message
+```python
+# Hip hop Bot
+h.register("recv_txt_msg", lambda msg: h.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
+```
+- Info API
+Pull all contact info (chatroom and user)
+```bash
+# About key 'wxid'
+## roomid: *@chatroom
+## wechatid: wxid_* or user-defined
+python3 bot/bot.py 'get_contact_list()'
+```
+Nickname
+```bash
+# user at contact list
+python3 bot/bot.py "get_user_nick(${wechatid})"
+# user at chatroom
+python3 bot/bot.py "get_chatroom_member_nick(${roomid},${wechatid})"
+```
+Personal info
+```bash
+# self
+python3 bot/bot.py "get_personal_info()"
+# contact (useless)
+python3 bot/bot.py "get_personal_detail(${wechatid})"
+```
+Send message
+```bash
+# TXT MSG: wechatid or roomid is required
+# AT MSG: wechatid and roomid and nickname is required
+python3 bot/bot.py "send_msg(${msg}, ${wechatid}, ${roomid}, ${nickname})"
+# sending picture or file:
+## wechatid or roomid
+## msg: <windows file path> e.g. c:\1.jpg or c:\1.tar.gz
+### c:\ <==> /home/app/.wine/drive_c in container
+```
+
 # Build Image
 ```bash
 ./build-docker.sh
