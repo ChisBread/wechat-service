@@ -9,6 +9,7 @@
 ## Usage
 1. Pull(or build) and run your wechat service
 2. open noVNC http://<Your IP Address>:8080/vnc.html and login wechat
+![inject](https://github.com/ChisBread/wechat-service/raw/master/images/inject.png)
 3. run the following example
 ### Examples
 #### Ding-Dong Bot:
