@@ -12,10 +12,12 @@
 3. run the following example
 ### Examples
 - Ding-Dong Bot:
+
 ```bash
 python3 bot/bot.py
 ```
 - Register your own function to the message event
+
 Websocket events
 ```python
 h.register("on_open", lambda ws: logging("hi"))
@@ -27,6 +29,7 @@ Receive at message
 h.register("recv_txt_msg", lambda msg: h.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
 ```
 - Info API
+
 Pull all contact info (chatroom and user)
 ```bash
 # About key 'wxid'
