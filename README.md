@@ -33,15 +33,18 @@ sudo docker run -it --name wechat-service --rm  \
 #### Ding-Dong Bot
 
 ```bash
-python3 bot/bot.py
+python3 example.py
 ```
 #### Register your own function to the message event
 
 Websocket events
 ```python
+from wesdk import *
+# connect to hook service
 bot = Bot(ip='127.0.0.1', port=5555)
 bot.register("on_open", lambda ws: logging("hi"))
 bot.register("on_close", lambda ws: logging("bye"))
+# run event loop
 bot.run()
 ```
 Receive at message
@@ -56,27 +59,27 @@ Pull all contact info (chatroom and user)
 # About key 'wxid'
 ## roomid: *@chatroom
 ## wechatid: wxid_* or user-defined
-python3 bot/bot.py 'get_contact_list()'
+python3 example.py 'get_contact_list()'
 ```
 Nickname
 ```bash
 # user at contact list
-python3 bot/bot.py "get_user_nick(${wechatid})"
+python3 example.py "get_user_nick(${wechatid})"
 # user at chatroom
-python3 bot/bot.py "get_chatroom_member_nick(${roomid},${wechatid})"
+python3 example.py "get_chatroom_member_nick(${roomid},${wechatid})"
 ```
 Personal info
 ```bash
 # self
-python3 bot/bot.py "get_personal_info()"
+python3 example.py "get_personal_info()"
 # contact (useless)
-python3 bot/bot.py "get_personal_detail(${wechatid})"
+python3 example.py "get_personal_detail(${wechatid})"
 ```
 Send message
 ```bash
 # TXT MSG: wechatid or roomid is required
 # AT MSG: wechatid and roomid and nickname is required
-python3 bot/bot.py "send_msg(${msg}, ${wechatid}, ${roomid}, ${nickname})"
+python3 example.py "send_msg(${msg}, ${wechatid}, ${roomid}, ${nickname})"
 # sending picture or file:
 ## wechatid or roomid
 ## msg: <windows file path> e.g. c:\1.jpg or c:\1.tar.gz

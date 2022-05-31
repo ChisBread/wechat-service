@@ -7,7 +7,7 @@ import json
 import requests
 import os
 import sys
-import query
+import wesdk.query as query
 websocket._logging._logger.level = -99
 def logging(msg):
     now=time.strftime("%Y-%m-%d %X")
@@ -283,12 +283,3 @@ class Bot(threading.Thread):
     
     def run(self):
         self.ws.run_forever()
-
-if __name__ == "__main__":
-    h = Bot()
-    if len(sys.argv) > 1:
-        print(json.dumps(eval('h.'+sys.argv[1]), ensure_ascii=False))
-        exit(0)
-    h.register("on_open", lambda ws: logging("Connecting to WeChat service .."))
-    h.register("on_close", lambda ws: logging("Byebye~"))
-    h.run()
