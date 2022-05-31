@@ -1,3 +1,4 @@
 websocket-client
 requests
 bs4
+vncdotool

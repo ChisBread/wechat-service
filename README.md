@@ -1,6 +1,7 @@
 # WeChat Service
 - Let your WeChat run as a service
 ![echo](https://github.com/ChisBread/wechat-service/raw/master/images/echo.png)
+![inject](https://github.com/ChisBread/wechat-service/raw/master/images/inject.png)
 ## TODO
 - *remove all binaries*
   - ~~Python Injector instead of auto-inject.exe binary~~
@@ -27,8 +28,15 @@ sudo docker run -it --name wechat-service --rm  \
 # -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
 ```
 2. open noVNC http://<Your IP Address>:8080/vnc.html and login wechat
-![inject](https://github.com/ChisBread/wechat-service/raw/master/images/inject.png)
-3. run the following example
+```bash
+# Use wesdk to click the login button, or get the QR code
+from wesdk import *
+dotool = DoTool()
+dotool.qrcode('./qr.png') # vnc screenshot
+# dotool.click_login()
+# dotool.switch_account()
+```
+1. run the following example
 ### Examples
 #### Ding-Dong Bot
 

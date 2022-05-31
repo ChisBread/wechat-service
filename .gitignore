@@ -1,3 +1,5 @@
 docker-compose.yaml
 *.pyc
 docker_buiding/
+screen.png
+qr.png
