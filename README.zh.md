@@ -23,7 +23,7 @@ sudo docker run -it --name wechat-service --rm  \
 # -v "<path>:/home/app/WeChat Files/"
 # -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
 ```
-1. 打开http://<Your IP Address>:8080/vnc.html 并登陆微信
+2. 打开http://<Your IP Address>:8080/vnc.html 并登陆微信
 ```bash
 # 或者使用wesdk中的工具获取二维码/点击登录按钮
 from wesdk import *
@@ -32,7 +32,7 @@ dotool.qrcode('./qr.png') # vnc screenshot
 # dotool.click_login()
 # dotool.switch_account()
 ```
-1. 运行下面的样例
+3. 运行下面的样例
 ### Examples
 #### Mini Bots
 

@@ -37,7 +37,7 @@ dotool.qrcode('./qr.png') # vnc screenshot
 # dotool.click_login()
 # dotool.switch_account()
 ```
-1. run the following example
+3. run the following example
 ### Examples
 #### Mini Bot
 The minibot contains shell bot and "smart" bot; to avoid harassment and security concerns, the sample must specify who can chat
