@@ -57,7 +57,7 @@ class Bot(threading.Thread):
     ################## 发送消息 ##################
     def send_msg(self, msg, wxid='null', roomid='null', nickname='null', force_type=None):
         uri = '/api/sendtxtmsg'
-        return json.loads(self.send_http(uri, query.send_msg(msg, wxid, roomid, nickname, force_type)))
+        return self.send_http(uri, query.send_msg(msg, wxid, roomid, nickname, force_type))
     ################## 个人信息 ##################
     # get_personal_info 获取登陆账号的个人信息
     def get_personal_info(self):

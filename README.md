@@ -38,10 +38,10 @@ dotool.qrcode('./qr.png') # vnc screenshot
 ```
 1. run the following example
 ### Examples
-#### Ding-Dong Bot
+#### Mini Bot
 
-```bash
-python3 example.py
+```
+python3 minibot.py <chat partner's nickname>
 ```
 #### Register your own function to the message event
 
