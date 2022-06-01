@@ -28,7 +28,7 @@ sudo docker run -it --name wechat-service --rm  \
 # -v "<path>:/home/app/WeChat Files/"
 # -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
 ```
-2. open noVNC http://<Your IP Address>:8080/vnc.html and login wechat
+2. open noVNC http://\<Your IP Address\>:8080/vnc.html and login wechat
 ```bash
 # Use wesdk to click the login button, or get the QR code
 from wesdk import *

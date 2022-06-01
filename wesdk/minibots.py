@@ -10,7 +10,15 @@ def make_shellbot(bot, adnicks):
     def retbot(msg):
         if not msg['content'].startswith('/sh.exec'):
             return False
-        if bot.get_user_nick(msg['wxid'])['content']['nick'] not in adnick:
+        if '@chatroom' in msg['wxid']:
+            roomid = msg['wxid'] #群id
+            senderid = msg['id1'] #个人id
+        else:
+            roomid = None
+            nickname = 'null'
+            senderid = msg['wxid'] #个人id
+        fromnick = bot.get_chatroom_member_nick(roomid, senderid)['content']['nick']
+        if fromnick not in adnicks:
             return False
         reply = ''
         command = msg['content'][len('/sh.exec'):]
