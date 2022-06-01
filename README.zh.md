@@ -33,8 +33,8 @@ dotool.qrcode('./qr.png') # vnc screenshot
 # dotool.switch_account()
 ```
 3. 运行下面的样例
-### Examples
-#### Mini Bots
+## Examples
+### Mini Bots
 
 minibot包含shell机器人和简单的对话机器人; 为避免造成骚扰和引起安全问题, 该样例必须指定可聊天对象
 ```
@@ -42,7 +42,7 @@ minibot包含shell机器人和简单的对话机器人; 为避免造成骚扰和
 # query: /sh.exec echo '好玩' reply: 好玩
 python3 minibot.py <聊天对象的昵称, 或者备注>
 ```
-#### 注册自定义事件函数
+### 注册自定义事件函数
 
 Websocket 事件
 ```python
@@ -59,7 +59,7 @@ bot.run()
 # Hip hop Bot
 bot.register("recv_txt_msg", lambda msg: bot.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
 ```
-#### Info API
+### Info API
 
 联系人列表(包括群)
 ```bash
@@ -94,10 +94,6 @@ python3 example.py "send_msg(${msg}, ${wechatid}, ${roomid}, ${nickname})"
 # 注意: 不需要的参数留空即可
 ```
 
-## Credit
-- https://github.com/chisbread/wechat-box
-- https://github.com/cixingguangming55555/wechat-bot
-
 ## docker-compose
 ```yaml
 version: "3.3"
@@ -128,3 +124,7 @@ services:
         tty: true
 
 ```
+
+## Credit
+- https://github.com/chisbread/wechat-box
+- https://github.com/cixingguangming55555/wechat-bot

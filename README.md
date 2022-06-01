@@ -3,11 +3,6 @@
 - Let your WeChat run as a service
 ![echo](https://github.com/ChisBread/wechat-service/raw/master/images/echo.png)
 ![inject](https://github.com/ChisBread/wechat-service/raw/master/images/inject.png)
-## TODO
-- *remove all binaries*
-  - ~~Python Injector instead of auto-inject.exe binary~~
-  - Build auto.dll from source
-
 ## Quick Start
 1. Pull(or build) and run your wechat service
 
@@ -38,15 +33,15 @@ dotool.qrcode('./qr.png') # vnc screenshot
 # dotool.switch_account()
 ```
 3. run the following example
-### Examples
-#### Mini Bot
+## Examples
+### Mini Bot
 The minibot contains shell bot and "smart" bot; to avoid harassment and security concerns, the sample must specify who can chat
 ```
 # query: 你会思考吗? reply: 我会思考
 # query: /sh.exec echo '好玩' reply: 好玩
 python3 minibot.py <chat partner's nickname>
 ```
-#### Register your own function to the message event
+### Register your own function to the message event
 
 Websocket events
 ```python
@@ -63,7 +58,7 @@ Receive at message
 # Hip hop Bot
 bot.register("recv_txt_msg", lambda msg: bot.send_msg('yo', msg['wxid']) if msg['content'] == 'hey' else None)
 ```
-#### Info API
+### Info API
 
 Pull all contact info (chatroom and user)
 ```bash
@@ -97,10 +92,6 @@ python3 example.py "send_msg(${msg}, ${wechatid}, ${roomid}, ${nickname})"
 ### c:\ <==> /home/app/.wine/drive_c in container
 ```
 
-## Credit
-- https://github.com/chisbread/wechat-box
-- https://github.com/cixingguangming55555/wechat-bot
-
 ## docker-compose
 ```yaml
 version: "3.3"
@@ -131,3 +122,12 @@ services:
         tty: true
 
 ```
+
+## Credit
+- https://github.com/chisbread/wechat-box
+- https://github.com/cixingguangming55555/wechat-bot
+
+## TODO
+- *remove all binaries*
+  - ~~Python Injector instead of auto-inject.exe binary~~
+  - Build auto.dll from source
