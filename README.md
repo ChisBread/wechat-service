@@ -1,4 +1,7 @@
 [简体中文](./README.zh.md)
+
+[免责声明](./Disclaimer.md)
+
 # WeChat Service
 - Let your WeChat run as a service
 ![echo](https://github.com/ChisBread/wechat-service/raw/master/images/echo.png)
