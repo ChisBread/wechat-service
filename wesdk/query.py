@@ -105,28 +105,30 @@ def send_msg(msg, wxid='null', roomid='null', nickname='null', force_type=None):
         raise ValueError("force_type错误, 不存在的类型")
     # 二选一时, 都应该填到wxid
     if roomid != 'null' and wxid == 'null':
-        nickname='null'
+        nickname = 'null'
         roomid = 'null'
         wxid = roomid
     lmsg = msg.lower()
     msg_type = TXT_MSG
-
-    if lmsg.startswith("c:\\") and (lmsg.endswith('.png') or lmsg.endswith('.jpg')):
+    # auto type
+    if (lmsg.startswith("c:\\") or lmsg.startswith("z:\\")) \
+            and (lmsg.endswith('.png') or lmsg.endswith('.jpg') or lmsg.endswith('.jpeg')):
         msg_type = PIC_MSG
-    elif lmsg.startswith("c:\\") and (lmsg.endswith('.7z') or lmsg.endswith('.zip') \
+    elif (lmsg.startswith("c:\\") or lmsg.startswith("z:\\")) \
+            and (lmsg.endswith('.7z') or lmsg.endswith('.zip') \
             or lmsg.endswith('.rar') or lmsg.endswith('.tar') or lmsg.endswith('.tar.gz')):
         msg_type = ATTATCH_FILE
+    if force_type is not None:
+        msg_type = force_type
     # 指定了群
     if roomid != 'null':
         # 带nickname的文本消息，at处理
-        if msg_type == TXT_MSG and nickname != 'null':
+        if force_type is None and msg_type == TXT_MSG and nickname != 'null':
             msg_type = AT_MSG
         # 其余的都认为是发群消息
         else:
             wxid = roomid
-            roomid = 'null'
-    if force_type is not None:
-        msg_type = force_type    
+            roomid = 'null'  
     
     qs={
         'id':uuid(),

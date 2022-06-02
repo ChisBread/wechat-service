@@ -1,14 +1,38 @@
 import os
+import wesdk.query as query
 def make_combinebot(bot, minibots):
     def retbot(msg):
         for mbot in minibots:
             if mbot(msg):
                 break
     return retbot
-    
+
+def make_filebot(bot, adnicks):
+    def retbot(msg):
+        if not msg['content'].startswith('/file '):
+            return False
+        if '@chatroom' in msg['wxid']:
+            roomid = msg['wxid'] #群id
+            senderid = msg['id1'] #个人id
+        else:
+            roomid = None
+            nickname = 'null'
+            senderid = msg['wxid'] #个人id
+        fromnick = bot.get_chatroom_member_nick(roomid, senderid)['content']['nick']
+        if fromnick not in adnicks:
+            return False
+        file = msg['content'][len('/file '):]
+        force_type = query.ATTATCH_FILE
+        lfile = file.lower()
+        if lfile.endswith('.jpg') or lfile.endswith('.jpeg') or lfile.endswith('.png'):
+            force_type = query.PIC_MSG
+        bot.send_msg(file, roomid=roomid,wxid=senderid,nickname=fromnick, force_type=force_type)
+        return True
+    return retbot
+
 def make_shellbot(bot, adnicks):
     def retbot(msg):
-        if not msg['content'].startswith('/sh.exec'):
+        if not msg['content'].startswith('/sh.exec '):
             return False
         if '@chatroom' in msg['wxid']:
             roomid = msg['wxid'] #群id
@@ -21,7 +45,7 @@ def make_shellbot(bot, adnicks):
         if fromnick not in adnicks:
             return False
         reply = ''
-        command = msg['content'][len('/sh.exec'):]
+        command = msg['content'][len('/sh.exec '):]
         p = os.popen(command,"r")
         while 1:
             line = p.readline()

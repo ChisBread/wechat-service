@@ -25,6 +25,8 @@ sudo docker run -it --name wechat-service --rm  \
 # optional
 # -v "<path>:/home/app/WeChat Files/"
 # -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
+
+## tips. mount cifs (https://docs.unmanic.app/docs/advanced/docker_compose_cifs_mounts)
 ```
 2. open noVNC http://\<Your IP Address\>:8080/vnc.html and login wechat
 ```bash
