@@ -4,6 +4,7 @@ import websocket
 import threading
 import time
 import json
+import re
 import requests
 import os
 import sys
@@ -18,6 +19,7 @@ class Bot(threading.Thread):
     contact_list = {}
     wxid = ''
     name = ''
+    AT_PATTERN = re.compile(r'@([^\u2005]+)\u2005(.*)')
     def __init__(self, ip='127.0.0.1', port=5555):
         threading.Thread.__init__(self)
         self.IP = ip
@@ -164,44 +166,48 @@ class Bot(threading.Thread):
             return
         logging(j)
     # wshd_recv_txt_cite_msg 引用的文字消息
-    def wshd_recv_txt_cite_msg(self, msg_json):
+    def wshd_recv_txt_cite_msg(self, msg):
         if 'recv_txt_cite_msg' in self.handle_register:
-            self.handle_register['recv_txt_cite_msg'](msg_json)
+            self.handle_register['recv_txt_cite_msg'](msg)
             return
-        msgXml=msg_json['content']['content'].replace('&amp;','&').replace('&lt;','<').replace('&gt;','>')
+        msgXml=msg['content']['content'].replace('&amp;','&').replace('&lt;','<').replace('&gt;','>')
         soup=BeautifulSoup(msgXml,'lxml')
-        msg_json={
+        msg={
             'content':soup.select_one('title').text,
-            'id':msg_json['id'],
-            'id1':msg_json['content']['id2'],
-            'id2':'wxid_fys2fico9put22',
+            'id':msg['id'],
+            'id1':msg['content']['id2'],
+            'id2':'wxid_dummy',
             'id3':'',
-            'srvid':msg_json['srvid'],
-            'time':msg_json['time'],
-            'type':msg_json['type'],
-            'wxid':msg_json['content']['id1']
+            'srvid':msg['srvid'],
+            'time':msg['time'],
+            'type':msg['type'],
+            'wxid':msg['content']['id1']
         }
         
-        self.wshd_recv_txt_msg(msg_json)
+        self.wshd_recv_txt_msg(msg)
     # wshd_recv_txt_msg 文字消息
-    def wshd_recv_txt_msg(self, msg_json):
+    def wshd_recv_txt_msg(self, msg):
+        if '@chatroom' in msg['wxid']:
+            msg['roomid'] = msg['wxid'] #群id
+            msg['senderid'] = msg['id1'] #个人id
+        else:
+            msg['roomid'] = None
+            msg['senderid'] = msg['wxid'] #个人id
+        at_match = self.AT_PATTERN.match(msg['content'])
+        if at_match:
+            msg['at_nickname'] = at_match.groups()[0]
+            msg['content'] = at_match.groups()[1]
+            msg['at_bot'] = msg['at_nickname'] == self.name
+        msg['nickname'] = self.get_chatroom_member_nick(msg['roomid'], msg['senderid'])['content']['nick']
+
         if 'recv_txt_msg' in self.handle_register:
             try:
-                self.handle_register['recv_txt_msg'](msg_json)
+                self.handle_register['recv_txt_msg'](msg)
             except:
                 import traceback
                 traceback.print_exc()
             return
-        logging(f'收到消息:{msg_json}')
-        msg_content = msg_json['content'].replace('\u2005','')
-        if '@chatroom' in msg_json['wxid']:
-            roomid = msg_json['wxid'] #群id
-            senderid = msg_json['id1'] #个人id
-        else:
-            roomid = None
-            nickname = 'null'
-            senderid = msg_json['wxid'] #个人id
-        nickname = self.get_chatroom_member_nick(roomid, senderid)['content']['nick']
+        logging(f'收到消息:{msg}')
         key_replys = {
             "ding": "dong",
             "dong": "ding",
@@ -212,21 +218,19 @@ class Bot(threading.Thread):
                 "replay":lambda x:x[len("/echo "):],
             }
         ]
-        if not roomid:
-            nickname = 'null'
-        if msg_content in key_replys:
-            self.ws.send(query.send_msg(key_replys[msg_content],roomid=roomid,wxid=senderid,nickname=nickname))
+        if msg['content'] in key_replys:
+            self.ws.send(query.send_msg(key_replys[msg['content']],wxid=msg['senderid'],roomid=msg['roomid'],nickname=msg['nickname']))
         for f in func_replays:
-            if not f["match"](msg_content):
+            if not f["match"](msg['content']):
                 continue
-            self.ws.send(query.send_msg(f["replay"](msg_content),roomid=roomid,wxid=senderid,nickname=nickname))
+            self.ws.send(query.send_msg(f["replay"](msg['content']),wxid=msg['senderid'],roomid=msg['roomid'],nickname=msg['nickname']))
             break
     # wshd_recv_pic_msg 图片消息
-    def wshd_recv_pic_msg(self, msg_json):
+    def wshd_recv_pic_msg(self, msg):
         if 'recv_pic_msg' in self.handle_register:
-            self.handle_register['recv_pic_msg'](msg_json)
+            self.handle_register['recv_pic_msg'](msg)
             return
-        self.wshd_noimplement(msg_json)
+        self.wshd_noimplement(msg)
 
     ########## WebSocket Events ##########
     def make_on_open(self):

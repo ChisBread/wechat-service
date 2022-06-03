@@ -40,7 +40,7 @@ minibot包含shell机器人和简单的对话机器人; 为避免造成骚扰和
 ```
 # query: 你会思考吗? reply: 我会思考
 # query: /sh.exec echo '好玩' reply: 好玩
-python3 minibot.py <聊天对象的昵称, 或者备注>
+python3 minibot.py example-config.yaml <chat partner's nickname>
 ```
 ### 注册自定义事件函数
 

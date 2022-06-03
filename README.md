@@ -44,7 +44,7 @@ The minibot contains shell bot and "smart" bot; to avoid harassment and security
 ```
 # query: 你会思考吗? reply: 我会思考
 # query: /sh.exec echo '好玩' reply: 好玩
-python3 minibot.py <chat partner's nickname>
+python3 minibot.py example-config.yaml <chat partner's nickname>
 ```
 ### Register your own function to the message event
 

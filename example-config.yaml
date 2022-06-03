@@ -1,0 +1,52 @@
+sys:
+  path: []
+auth:
+  webui:
+    username: admin
+    password: pass
+  bot-users:
+    - username: admin
+      password: pass
+
+chat-rules:
+  all:
+    nickname: ".*"
+    # wxid
+    senderid: []
+    # roomid
+    roomid: []
+  admin:
+    nickname: [FOOO, BARR]
+
+minibots:
+  shellbot:
+    import: wesdk.minibots
+    function: shellbot
+  filebot:
+    import: wesdk.minibots
+    function: filebot
+  smartbot: # 内置minibots, 也可以直接引用
+    function: minibots.smartbot
+  echobot:
+    function: "lambda bot, msg:bot.send_msg(msg['content'],msg['senderid'],msg['roomid'],msg['nickname'])"
+
+reply-rules:
+  # 按顺序匹配, 命中则短路(不会继续执行)
+  - pattern: "^/sh(\\.exec)?\\s" # 正则search
+    pattern-trim: true # 去掉匹配pattern的字符串
+    minibot: "shellbot" # 预先定义的minibot, 负责回复消息
+    chat-rule: admin # 如果为list, 则每个元素为 AND 关系, 必须全部满足
+
+  - pattern: ["吗$", "\\?$", "？$", "是不是"] # 如果为list, 则每个元素为 OR 关系, 只要满足一个即可
+    minibot: "smartbot"
+    chat-rule: admin
+
+  - pattern: "^/f(ile)?\\s"
+    pattern-trim: true
+    minibot: "filebot"
+    chat-rule: admin
+
+  - pattern: "^/echo\\s"
+    pattern-trim: true
+    minibot: "echobot"
+    chat-rule: admin

@@ -2,14 +2,20 @@ from wesdk import *
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python minibot.py <chat partner's nickname>")
+        print("Usage: python config.py <path of config.yaml> <>")
         exit(1)
+    updates = {
+        "chat-rules":{
+            "admin":{
+                "nickname":sys.argv[2:]
+            }
+        }
+    }
     bot = Bot()
-    minibots =[
-        make_shellbot(bot, sys.argv[1:]),
-        make_filebot(bot, sys.argv[1:]),
-        make_smartbot(bot, sys.argv[1:]),
-    ]
-    cobot = make_combinebot(bot, minibots)
-    bot.register("recv_txt_msg",cobot)
+    retbots = loadbots(sys.argv[1], updates)
+    if not retbots:
+        print("config parse error.")
+        exit(1)
+    cobot = minibots.make_combinebot(retbots)
+    bot.register("recv_txt_msg",lambda msg: cobot(bot, msg))
     bot.run()
