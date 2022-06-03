@@ -74,6 +74,6 @@ reply-rules:
   - pattern: "^hey$"
     minibot: "hippopbot"
     chat-rule: admin
-  - pattern: ".*天气.*"
+  - pattern: "天气"
     minibot: "weatherbot"
     chat-rule: admin
