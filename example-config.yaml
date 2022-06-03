@@ -10,34 +10,49 @@ auth:
 
 chat-rules:
   all:
+    # nickname: 昵称/备注的正则表达式
+    ## 为list时 则每个元素为 OR 关系, 只要满足一个即可
     nickname: ".*"
-    # wxid
+    # senderid: wxid中的个人id
+    ## 字符串匹配, 不支持正则
     senderid: []
-    # roomid
+    # roomid: 群id, 以@chatroom结尾
+    ## 字符串匹配, 不支持正则
     roomid: []
   admin:
     nickname: [FOOO, BARR]
 
 minibots:
+  smartbot:
+    # function: 内置的minibots, 可以直接引用
+    function: minibots.smartbot
   shellbot:
+    # import: 指明import路径
     import: wesdk.minibots
     function: shellbot
   filebot:
     import: wesdk.minibots
     function: filebot
-  smartbot: # 内置minibots, 也可以直接引用
-    function: minibots.smartbot
   echobot:
+    # function: 也支持lambda表达式
     function: "lambda bot, msg:bot.send_msg(msg['content'],msg['senderid'],msg['roomid'],msg['nickname'])"
 
 reply-rules:
   # 按顺序匹配, 命中则短路(不会继续执行)
-  - pattern: "^/sh(\\.exec)?\\s" # 正则search
-    pattern-trim: true # 去掉匹配pattern的字符串
-    minibot: "shellbot" # 预先定义的minibot, 负责回复消息
-    chat-rule: admin # 如果为list, 则每个元素为 AND 关系, 必须全部满足
+  - # pattern: 正则表达式
+    ## 如果为list, 则每个元素为 OR 关系, 只要满足一个即可
+    pattern: "^/sh(\\.exec)?\\s"
+    # pattern-trim: 去掉匹配pattern的字符串
+    ## '/sh.exec ls' ==> 'ls'
+    pattern-trim: true
+    # minibot: 负责回复消息
+    ## 声明形式为foo(bot, msg)
+    minibot: "shellbot"
+    # chat-rule: 机器人聊天权限
+    ## 如果为list, 则每个元素为 AND 关系, 必须全部满足
+    chat-rule: admin
 
-  - pattern: ["吗$", "\\?$", "？$", "是不是"] # 如果为list, 则每个元素为 OR 关系, 只要满足一个即可
+  - pattern: ["吗$", "\\?$", "？$", "是不是"]
     minibot: "smartbot"
     chat-rule: admin
 

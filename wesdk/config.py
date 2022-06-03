@@ -3,6 +3,7 @@
 import copy
 import yaml
 import re
+import sys
 import traceback
 import importlib
 import wesdk.minibots as minibots
@@ -27,7 +28,6 @@ def rule_wrapper(conf, bot_rule):
     # 全局minibot映射
     if 'minibot' in rule:
         rule['minibot'] = conf['minibots'][rule['minibot']]
-    # 
     def wrapped_bot(bot, msg):
         # OR ...
         pat_pass = False
@@ -91,6 +91,8 @@ def loadbots(filepath, updates={}):
     if not conf:
         return None
     deep_update(conf, updates)
+    if isinstance(conf.get('sys', {}).get('path', []), list):
+        sys.path += conf.get('sys', {}).get('path', [])
     imports = {}
     # 将minibots配置文件解析为形如foo(bot, msg)的函数
     for key, val in conf['minibots'].items():

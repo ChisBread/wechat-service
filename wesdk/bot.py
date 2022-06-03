@@ -7,7 +7,6 @@ import json
 import re
 import requests
 import os
-import sys
 import wesdk.query as query
 websocket._logging._logger.level = -99
 def logging(msg):
