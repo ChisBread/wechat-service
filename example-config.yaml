@@ -36,6 +36,10 @@ minibots:
   echobot:
     # function: 也支持lambda表达式
     function: "lambda bot, msg:bot.send_msg(msg['content'],msg['senderid'],msg['roomid'],msg['nickname'])"
+  hippopbot:
+    # ./minibot.py 演示脚本
+    import: minibot
+    function: hippopbot
 
 reply-rules:
   # 按顺序匹配, 命中则短路(不会继续执行)
@@ -64,4 +68,7 @@ reply-rules:
   - pattern: "^/echo\\s"
     pattern-trim: true
     minibot: "echobot"
+    chat-rule: admin
+  - pattern: "^hey$"
+    minibot: "hippopbot"
     chat-rule: admin

@@ -1,5 +1,6 @@
 from wesdk import *
-
+def hippopbot(bot, msg):
+    bot.send_msg('yo',msg['senderid'],msg['roomid'],msg['nickname'])
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python config.py <path of config.yaml> <>")
