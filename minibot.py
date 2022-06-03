@@ -12,10 +12,9 @@ if __name__ == "__main__":
         }
     }
     bot = Bot()
-    retbots = loadbots(sys.argv[1], updates)
-    if not retbots:
+    combinebot = load_bots(sys.argv[1], updates)
+    if not combinebot:
         print("config parse error.")
         exit(1)
-    cobot = minibots.make_combinebot(retbots)
-    bot.register("recv_txt_msg",lambda msg: cobot(bot, msg))
+    bot.register("recv_txt_msg",lambda msg: combinebot(bot, msg))
     bot.run()

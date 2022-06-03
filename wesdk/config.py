@@ -83,8 +83,9 @@ def deep_update(source, overrides):
         else:
             source[key] = overrides[key]
     return source
-
-def loadbots(filepath, updates={}):
+# load_bots: 加载配置文件中定义的bot规则
+## 返回minibot函数 combine(bot, msg)
+def load_bots(filepath, updates={}):
     conf = None
     with open(filepath, 'r', encoding="utf-8") as file:
         conf = yaml.load(file, Loader=yaml.FullLoader)
@@ -115,4 +116,4 @@ def loadbots(filepath, updates={}):
     bots = []
     for i, bot_rule in enumerate(conf['reply-rules']):
         bots.append(rule_wrapper(conf, bot_rule))
-    return bots
+    return minibots.make_combinebot(bots)
