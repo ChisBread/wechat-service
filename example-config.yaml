@@ -40,6 +40,8 @@ minibots:
     # ./minibot.py 演示脚本
     import: minibot
     function: hippopbot
+  weatherbot:
+    function: "minibots.make_weatherbot('101010100')"
 
 reply-rules:
   # 按顺序匹配, 命中则短路(不会继续执行)
@@ -71,4 +73,7 @@ reply-rules:
     chat-rule: admin
   - pattern: "^hey$"
     minibot: "hippopbot"
+    chat-rule: admin
+  - pattern: ".*天气.*"
+    minibot: "weatherbot"
     chat-rule: admin
