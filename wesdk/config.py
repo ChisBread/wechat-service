@@ -91,7 +91,6 @@ def loadbots(filepath, updates={}):
     if not conf:
         return None
     deep_update(conf, updates)
-    print(conf)
     imports = {}
     # 将minibots配置文件解析为形如foo(bot, msg)的函数
     for key, val in conf['minibots'].items():
