@@ -29,6 +29,9 @@ class Bot(threading.Thread):
             on_message=self.make_on_message(), \
             on_error=self.make_on_error(), \
             on_close=self.make_on_close())
+        contlist = self.get_contact_list()
+        for item in contlist['content']:
+            self.contact_list[item['wxid']] = item
     def register(self, handle_name, foo):
         self.handle_register[handle_name] = foo
     ########## HTTP API 样例 ##########
@@ -54,6 +57,12 @@ class Bot(threading.Thread):
                 rsp['content'] = json.loads(rsp['content'])
             except:
                 pass
+        if rsp.get('type', 0) == query.CHATROOM_MEMBER_NICK \
+            and not rsp['content'].get('nick', ''):
+            if rsp['content']['wxid'] not in ['ROOT', 'null']:
+                rsp['content']['nick'] = self.contact_list.get(rsp['content']['wxid'], {}).get('name', '')
+            elif rsp['content']['roomid'] not in ['null']:
+                rsp['content']['nick'] = self.contact_list.get(rsp['content']['roomid'], {}).get('name', '')
         return rsp
     ################## 发送消息 ##################
     def send_msg(self, msg, wxid='null', roomid='null', nickname='null', force_type=None):
@@ -126,17 +135,13 @@ class Bot(threading.Thread):
         if 'chatroom_member_nick' in self.handle_register:
             self.handle_register['chatroom_member_nick'](j)
             return
-        data=j.content
-        for d in data:
-            logging(f'nickname:{d.nickname}')
+        self.wshd_noimplement(j)
     # wshd_chatroom_member 所有群的成员信息
     def wshd_chatroom_member(self, j):
         if 'chatroom_member' in self.handle_register:
             self.handle_register['chatroom_member'](j)
             return
-        data=j.content
-        for d in data:
-            logging(f'roomid:{d.roomid}')
+        self.wshd_noimplement(j)
     # wshd_contact_list 联系人
     def wshd_contact_list(self, j):
         for item in j['content']:
