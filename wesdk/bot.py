@@ -57,12 +57,13 @@ class Bot(threading.Thread):
                 rsp['content'] = json.loads(rsp['content'])
             except:
                 pass
-        if rsp.get('type', 0) == query.CHATROOM_MEMBER_NICK \
-            and not rsp['content'].get('nick', ''):
-            if rsp['content']['wxid'] not in ['ROOT', 'null']:
-                rsp['content']['nick'] = self.contact_list.get(rsp['content']['wxid'], {}).get('name', '')
-            elif rsp['content']['roomid'] not in ['null']:
-                rsp['content']['nick'] = self.contact_list.get(rsp['content']['roomid'], {}).get('name', '')
+        # # 某些版本获取不到群昵称，需要从联系人里取
+        # if rsp.get('type', 0) == query.CHATROOM_MEMBER_NICK \
+        #     and not rsp['content'].get('nick', ''):
+        #     if rsp['content']['wxid'] not in ['ROOT', 'null']:
+        #         rsp['content']['nick'] = self.contact_list.get(rsp['content']['wxid'], {}).get('name', '')
+        #     elif rsp['content']['roomid'] not in ['null']:
+        #         rsp['content']['nick'] = self.contact_list.get(rsp['content']['roomid'], {}).get('name', '')
         return rsp
     ################## 发送消息 ##################
     def send_msg(self, msg, wxid='null', roomid='null', nickname='null', force_type=None):
