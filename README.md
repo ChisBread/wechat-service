@@ -122,7 +122,7 @@ services:
             - "5900:5900" # vnc server
         volumes:
             - "<path>:/home/app/WeChat Files/" 
-            - "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
+            - "<path>:/home/app/.wine/drive_c/users/app/AppData/"
             - "<path>:/home/app/.wine/drive_c/temp/wechat/" # hook config
         tty: true
 
