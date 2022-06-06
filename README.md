@@ -13,7 +13,7 @@
 # pull
 sudo docker pull chisbread/wechat-service
 # or build
-# ./build-docker.sh
+# ./build-injector-box.sh
 sudo docker run -it --name wechat-service --rm  \
     -e HOOK_PROC_NAME=WeChat \
     -e HOOK_DLL=auto.dll \
