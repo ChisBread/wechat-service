@@ -18,6 +18,7 @@ sudo docker run -it --name wechat-service --rm  \
     -e INJ_CONDITION="[ \"\`sudo netstat -tunlp | grep 5555\`\" != '' ] && exit 0 ; sleep 5 ; curl 'http://127.0.0.1:8680/hi' 2>/dev/null | grep -P 'code.:0'" \
     -e TARGET_CMD=wechat-start \
     -p 8080:8080 -p 5555:5555 -p 5900:5900 \
+    --add-host=dldir1.qq.com:127.0.0.1 \
     chisbread/wechat-service:latest
 # optional 可选,微信数据目录
 # -v "<path>:/home/app/WeChat Files/"
@@ -117,6 +118,8 @@ services:
             - "8080:8080" # noVNC
             - "5555:5555" # websocket server
             - "5900:5900" # vnc server
+        extra_hosts:
+            - "dldir1.qq.com:127.0.0.1"
         volumes:
             - "<path>:/home/app/WeChat Files/" 
             - "<path>:/home/app/.wine/drive_c/users/app/AppData/"
