@@ -22,7 +22,7 @@ sudo docker run -it --name wechat-service --rm  \
     chisbread/wechat-service:latest
 # optional 可选,微信数据目录
 # -v "<path>:/home/app/WeChat Files/"
-# -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
+# -v "<path>:/home/app/.wine/drive_c/users/app/AppData/"
 ```
 2. 打开http://\<Your IP Address\>:8080/vnc.html 并登陆微信
 ```bash

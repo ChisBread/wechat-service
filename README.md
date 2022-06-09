@@ -25,7 +25,7 @@ sudo docker run -it --name wechat-service --rm  \
     chisbread/wechat-service:latest
 # optional
 # -v "<path>:/home/app/WeChat Files/"
-# -v "<path>:/home/app/.wine/drive_c/users/user/Application Data/"
+# -v "<path>:/home/app/.wine/drive_c/users/app/AppData/"
 
 ## tips. mount cifs (https://docs.unmanic.app/docs/advanced/docker_compose_cifs_mounts)
 ```
